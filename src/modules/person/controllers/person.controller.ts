@@ -1,47 +1,36 @@
 import {
   Controller,
-  Get,
   Post,
-  Body,
-  Patch,
-  Param,
+  Get,
+  Put,
   Delete,
+  Body,
+  Param,
 } from '@nestjs/common';
-import { CreatePersonDto } from '../dto/create-person.dto';
 import { PersonService } from '../services/person.service';
-import { UpdatePersonDto } from '../dto/update-person.dto';
 
 @Controller('person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
   @Post()
-  create(@Body() createPersonDto: CreatePersonDto) {
-    return this.personService.create(createPersonDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.personService.findAll();
-  }
-
-  @Get('random')
-  findRandom() {
-    return this.personService.findRandom();
+  async createPerson(@Body() person: any) {
+    console.log(person);
+    return this.personService.createPerson(person);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personService.findOne(+id);
+  async getPerson(@Param('id') id: string) {
+    return this.personService.getPerson(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-    return this.personService.update(+id, updatePersonDto);
+  @Put(':id')
+  async updatePerson(@Param('id') id: string, @Body() updateData: any) {
+    return this.personService.updatePerson(id, updateData);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personService.remove(+id);
+  async deletePerson(@Param('id') id: string) {
+    return this.personService.deletePerson(id);
   }
 }
