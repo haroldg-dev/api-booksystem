@@ -10,7 +10,7 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'; // To handle mars
 
 @Injectable()
 export class PersonService {
-  private tableName = 'SPA_person'; // Make sure the DynamoDB table exists
+  private tableName = 'SPA_Person'; // Make sure the DynamoDB table exists
 
   constructor(private readonly dynamoDBClient: DynamoDBClient) {}
 
@@ -41,7 +41,7 @@ export class PersonService {
   async getPerson(id: string): Promise<any> {
     const command = new GetItemCommand({
       TableName: this.tableName,
-      Key: marshall({ id }), // Partition Key
+      Key: marshall({ person_id: id }), // Partition Key
     });
 
     try {
