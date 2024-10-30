@@ -21,6 +21,11 @@ export class MassageServiceController {
     return this.massageServicesService.createMassageService(person);
   }
 
+  @Get()
+  async getAllMassageService() {
+    return this.massageServicesService.getAllMassageServices();
+  }
+
   @Get(':id')
   async getMassageService(@Param('id') id: string) {
     return this.massageServicesService.getMassageService(id);
