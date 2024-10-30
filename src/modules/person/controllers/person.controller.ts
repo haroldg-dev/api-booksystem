@@ -15,7 +15,6 @@ export class PersonController {
 
   @Post()
   async createPerson(@Body() person: any) {
-    console.log(person);
     return this.personService.createPerson(person);
   }
 
