@@ -3,14 +3,20 @@
 # Commands
 
 nest g res modules/
+npm install @nestjs/config aws-sdk @aws-sdk/client-dynamodb
 
 ## MAIN FEATURES
 
 - Book a service
+  Entities related :
   - User
   - Service
   - datetime available
-  - datetime picked
+  - booking
+    - datetimepicked
+    - userId
+    - serviceId
+    - paymentId
   - payment
 
 ## ENTITIES
@@ -20,3 +26,5 @@ nest g res modules/
 - users
 - categories (services)
 - availableTime ?
+- booking
+- payments
