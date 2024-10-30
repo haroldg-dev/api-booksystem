@@ -7,6 +7,7 @@ import {
   DeleteItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'; // To handle marshalling/unmarshalling of DynamoDB objects
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PersonService {
@@ -16,18 +17,20 @@ export class PersonService {
 
   // Create a new person
   async createPerson(person: any): Promise<any> {
+    const item = marshall({
+      person_id: uuidv4(),
+      firstName: person.firstName,
+      lastName: person.lastName,
+      email: person.email,
+      phone: person.phone,
+      password: person.password,
+    });
+
     const command = new PutItemCommand({
       TableName: this.tableName,
-      Item: marshall({
-        // id: person.id ?? null, // Partition Key
-        firstName: person.firstName,
-        lastName: person.lastName,
-        email: person.email,
-        phone: person.phone ?? null,
-        password: person.password,
-      }),
+      Item: item,
     });
-    console.log('Service: ', person);
+
     try {
       await this.dynamoDBClient.send(command);
       return { message: 'Person created successfully!' };
