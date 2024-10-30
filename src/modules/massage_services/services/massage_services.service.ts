@@ -8,6 +8,7 @@ import {
   ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'; // To handle marshalling/unmarshalling of DynamoDB objects
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class MassageServicesService {
@@ -20,8 +21,8 @@ export class MassageServicesService {
     const command = new PutItemCommand({
       TableName: this.tableName,
       Item: marshall({
-        // id: massageService.id ?? null, // Partition Key
-        name: massageService.firstName,
+        services_id: uuidv4(),
+        name: massageService.name,
         description: massageService.description,
         price: massageService.price,
         duration: massageService.duration,
