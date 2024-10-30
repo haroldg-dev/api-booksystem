@@ -5,6 +5,7 @@ import {
   PutItemCommand,
   UpdateItemCommand,
   DeleteItemCommand,
+  ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'; // To handle marshalling/unmarshalling of DynamoDB objects
 
@@ -36,6 +37,21 @@ export class MassageServicesService {
     }
   }
 
+  //Retrieve all massage services
+  async getAllMassageServices(): Promise<any[]> {
+    const command = new ScanCommand({
+      TableName: this.tableName,
+    });
+
+    try {
+      const result = await this.dynamoDBClient.send(command);
+      return result.Items ? result.Items.map((item) => unmarshall(item)) : [];
+    } catch (error) {
+      console.error('Error fetching all massage services', error);
+      throw new Error('Could not fetch massage services from DynamoDB');
+    }
+  }
+
   // Retrieve a massage service by id
   async getMassageService(id: string): Promise<any> {
     const command = new GetItemCommand({
@@ -53,7 +69,10 @@ export class MassageServicesService {
   }
 
   // Update a massage service
-  async updateMassageService(id: string, updateData: Partial<any>): Promise<any> {
+  async updateMassageService(
+    id: string,
+    updateData: Partial<any>,
+  ): Promise<any> {
     const command = new UpdateItemCommand({
       TableName: this.tableName,
       Key: marshall({ id }), // Partition Key
