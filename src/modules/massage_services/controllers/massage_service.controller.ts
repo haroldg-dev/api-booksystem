@@ -6,8 +6,10 @@ import {
   Delete,
   Body,
   Param,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MassageServicesService } from '../services/massage_services.service';
+import { CreateMassageServiceDto } from '../dto/create-massage-service.dto';
 
 @Controller('massageService')
 export class MassageServiceController {
@@ -16,9 +18,11 @@ export class MassageServiceController {
   ) {}
 
   @Post()
-  async createMassageService(@Body() person: any) {
-    console.log(person);
-    return this.massageServicesService.createMassageService(person);
+  async createMassageService(
+    @Body(ValidationPipe) massage_service: CreateMassageServiceDto,
+  ) {
+    console.log(massage_service);
+    return this.massageServicesService.createMassageService(massage_service);
   }
 
   @Get()
