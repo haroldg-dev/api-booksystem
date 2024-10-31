@@ -9,7 +9,6 @@ import { PaymentModule } from './modules/payment/payment.module';
     ConfigModule.forRoot({ isGlobal: true }),
     PersonModule,
     BookingModule,
-    ,
     PaymentModule,
   ],
   controllers: [],
