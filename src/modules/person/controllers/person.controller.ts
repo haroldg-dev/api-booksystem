@@ -6,15 +6,17 @@ import {
   Delete,
   Body,
   Param,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PersonService } from '../services/person.service';
+import { CreatePersonDto } from '../dto/create-person.dto';
 
 @Controller('person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
   @Post()
-  async createPerson(@Body() person: any) {
+  async createPerson(@Body(ValidationPipe) person: CreatePersonDto) {
     return this.personService.createPerson(person);
   }
 
