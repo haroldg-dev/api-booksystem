@@ -1,5 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { PaymentService } from './payment.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
+import { PaymentService } from '../services/payment.service';
 
 @Controller('payment')
 export class PaymentController {
@@ -19,13 +27,24 @@ export class PaymentController {
 
   // Create a new payment
   @Post()
-  async createPayment(@Body() paymentData: { id: string; amount: number; date: string; status: string }) {
+  async createPayment(
+    @Body()
+    paymentData: {
+      id: string;
+      amount: number;
+      date: string;
+      status: string;
+    },
+  ) {
     return await this.paymentService.createPayment(paymentData);
   }
 
   // Update a specific payment
   @Put(':id')
-  async updatePayment(@Param('id') id: string, @Body() updateData: { amount?: number; date?: string; status?: string }) {
+  async updatePayment(
+    @Param('id') id: string,
+    @Body() updateData: { amount?: number; date?: string; status?: string },
+  ) {
     return await this.paymentService.updatePayment(id, updateData);
   }
 

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { BookingService } from './booking.service';
-import { BookingController } from './booking.controller';
+import { BookingService } from './services/booking.service';
+import { BookingController } from './controllers/booking.controller';
 
 @Module({
   imports: [

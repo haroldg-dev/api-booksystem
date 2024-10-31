@@ -1,5 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { DynamoDBClient, PutItemCommand, GetItemCommand, ScanCommand, UpdateItemCommand, DeleteItemCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  PutItemCommand,
+  GetItemCommand,
+  ScanCommand,
+  UpdateItemCommand,
+  DeleteItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 @Injectable()
@@ -12,10 +19,10 @@ export class PaymentService {
   // Get all payments
   async getAllPayments() {
     const command = new ScanCommand({
-      TableName: 'Payments', 
+      TableName: 'Payments',
     });
     const result = await this.dynamoDbClient.send(command);
-    return result.Items.map(item => unmarshall(item));
+    return result.Items.map((item) => unmarshall(item));
   }
 
   // Get a specific payment by ID
@@ -29,7 +36,12 @@ export class PaymentService {
   }
 
   // Create a new payment
-  async createPayment(paymentData: { id: string; amount: number; date: string; status: string }) {
+  async createPayment(paymentData: {
+    id: string;
+    amount: number;
+    date: string;
+    status: string;
+  }) {
     const command = new PutItemCommand({
       TableName: 'Payments',
       Item: marshall(paymentData),
@@ -39,13 +51,18 @@ export class PaymentService {
   }
 
   // Update an existing payment
-  async updatePayment(id: string, updateData: { amount?: number; date?: string; status?: string }) {
+  async updatePayment(
+    id: string,
+    updateData: { amount?: number; date?: string; status?: string },
+  ) {
     const updateExpression = [];
     const expressionAttributeValues = {};
-    
+
     if (updateData.amount) {
       updateExpression.push('amount = :amount');
-      expressionAttributeValues[':amount'] = { N: updateData.amount.toString() };
+      expressionAttributeValues[':amount'] = {
+        N: updateData.amount.toString(),
+      };
     }
     if (updateData.date) {
       updateExpression.push('date = :date');
