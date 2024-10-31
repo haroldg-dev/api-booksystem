@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PersonModule } from './modules/person/person.module';
+import { BookingModule } from './booking/booking.module';
 import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
-  imports: [PersonModule, PaymentModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PersonModule,
+    BookingModule,
+    ,
+    PaymentModule,
+  ],
   controllers: [],
   providers: [],
 })
