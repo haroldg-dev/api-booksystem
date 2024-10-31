@@ -23,6 +23,11 @@ export class PersonController {
     return this.personService.getPerson(id);
   }
 
+  @Get()
+  async getAllPerson() {
+    return this.personService.getAllPersons();
+  }
+
   @Put(':id')
   async updatePerson(@Param('id') id: string, @Body() updateData: any) {
     return this.personService.updatePerson(id, updateData);

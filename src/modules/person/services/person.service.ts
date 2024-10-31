@@ -5,6 +5,7 @@ import {
   PutItemCommand,
   UpdateItemCommand,
   DeleteItemCommand,
+  ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'; // To handle marshalling/unmarshalling of DynamoDB objects
 import { v4 as uuidv4 } from 'uuid';
@@ -53,6 +54,21 @@ export class PersonService {
     } catch (error) {
       console.error('Error fetching person', error);
       throw new Error('Could not fetch person from DynamoDB');
+    }
+  }
+
+  // Retrieve all persons
+  async getAllPersons(): Promise<any[]> {
+    const command = new ScanCommand({
+      TableName: this.tableName,
+    });
+
+    try {
+      const result = await this.dynamoDBClient.send(command);
+      return result.Items ? result.Items.map((item) => unmarshall(item)) : [];
+    } catch (error) {
+      console.error('Error fetching all persons', error);
+      throw new Error('Could not fetch persons from DynamoDB');
     }
   }
 
