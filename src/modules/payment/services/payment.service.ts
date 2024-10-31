@@ -8,6 +8,7 @@ import {
   DeleteItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PaymentService {
@@ -36,15 +37,15 @@ export class PaymentService {
   }
 
   // Create a new payment
-  async createPayment(paymentData: {
-    id: string;
-    amount: number;
-    date: string;
-    status: string;
-  }) {
+  async createPayment(paymentData: any) {
     const command = new PutItemCommand({
       TableName: 'Payments',
-      Item: marshall(paymentData),
+      Item: marshall({
+        id: uuidv4(),
+        amount: paymentData.amount,
+        date: paymentData.date,
+        status: paymentData.status,
+      }),
     });
     await this.dynamoDbClient.send(command);
     return paymentData;

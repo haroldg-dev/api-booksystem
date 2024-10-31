@@ -6,8 +6,10 @@ import {
   Delete,
   Param,
   Body,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PaymentService } from '../services/payment.service';
+import { CreatePaymentDto } from '../dto/create-payment.dto';
 
 @Controller('payment')
 export class PaymentController {
@@ -28,13 +30,8 @@ export class PaymentController {
   // Create a new payment
   @Post()
   async createPayment(
-    @Body()
-    paymentData: {
-      id: string;
-      amount: number;
-      date: string;
-      status: string;
-    },
+    @Body(ValidationPipe)
+    paymentData: CreatePaymentDto,
   ) {
     return await this.paymentService.createPayment(paymentData);
   }
