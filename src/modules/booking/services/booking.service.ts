@@ -8,6 +8,8 @@ import {
   DeleteItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { CreateBookingDto } from '../dto/create-booking.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class BookingService {
@@ -36,15 +38,15 @@ export class BookingService {
   }
 
   // Create a new booking
-  async createBooking(bookingData: {
-    id: string;
-    customerName: string;
-    bookingDate: string;
-    status: string;
-  }) {
+  async createBooking(bookingData: CreateBookingDto) {
     const command = new PutItemCommand({
       TableName: 'Bookings',
-      Item: marshall(bookingData),
+      Item: marshall({
+        id: uuidv4(),
+        customerName: bookingData.customerName,
+        bookingDate: bookingData.bookingDate,
+        status: bookingData.status,
+      }),
     });
     await this.dynamoDbClient.send(command);
     return bookingData;

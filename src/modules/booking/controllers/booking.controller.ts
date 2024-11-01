@@ -6,8 +6,10 @@ import {
   Delete,
   Param,
   Body,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BookingService } from '../services/booking.service';
+import { CreateBookingDto } from '../dto/create-booking.dto';
 
 @Controller('booking')
 export class BookingController {
@@ -24,7 +26,7 @@ export class BookingController {
   }
 
   @Post()
-  async createBooking(@Body() bookingData) {
+  async createBooking(@Body(ValidationPipe) bookingData: CreateBookingDto) {
     return await this.bookingService.createBooking(bookingData);
   }
 
