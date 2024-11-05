@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { BookingService } from './booking.service';
-import { BookingController } from './booking.controller';
+import { PaymentService } from './services/payment.service';
+import { PaymentController } from './controllers/payment.controller';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { BookingController } from './booking.controller';
     }),
   ],
   providers: [
-    BookingService,
+    PaymentService,
     {
       provide: DynamoDBClient,
       useFactory: (configService: ConfigService) => {
@@ -26,7 +26,7 @@ import { BookingController } from './booking.controller';
       inject: [ConfigService],
     },
   ],
-  controllers: [BookingController],
-  exports: [BookingService],
+  controllers: [PaymentController],
+  exports: [PaymentService],
 })
-export class BookingModule {}
+export class PaymentModule {}

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { PersonService } from './services/person.service';
-import { PersonController } from './controllers/person.controller';
+import { BookingService } from './services/booking.service';
+import { BookingController } from './controllers/booking.controller';
 
 @Module({
   imports: [
@@ -11,22 +11,22 @@ import { PersonController } from './controllers/person.controller';
     }),
   ],
   providers: [
-    PersonService,
+    BookingService,
     {
       provide: DynamoDBClient,
       useFactory: (configService: ConfigService) => {
         return new DynamoDBClient({
-          region: configService.get('AWS_REGION'),
+          region: configService.get<string>('AWS_REGION'),
           credentials: {
-            accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
-            secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+            accessKeyId: configService.get<string>('AWS_ACCESS_KEY_ID'),
+            secretAccessKey: configService.get<string>('AWS_SECRET_ACCESS_KEY'),
           },
         });
       },
       inject: [ConfigService],
     },
   ],
-  controllers: [PersonController],
-  exports: [PersonService],
+  controllers: [BookingController],
+  exports: [BookingService],
 })
-export class PersonModule {}
+export class BookingModule {}
