@@ -56,7 +56,42 @@ export class PersonService {
       throw new Error('Could not fetch person from DynamoDB');
     }
   }
+  // Retrieve a person by id
+  async getPersonByEmail(email: string): Promise<any> {
+    const command = new ScanCommand({
+      TableName: this.tableName,
+      FilterExpression: 'email = :email',
+      ExpressionAttributeValues: marshall({
+        ':email': email,
+      }),
+    });
 
+    try {
+      const result = await this.dynamoDBClient.send(command);
+      if (result.Items && result.Items.length > 0) {
+        return unmarshall(result.Items[0]);
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching person by email', error);
+      throw new Error('Could not fetch person from DynamoDB');
+    }
+  }
+  // async getPersonByEmail(email: string): Promise<any> {
+  //   console.log(email);
+  //   const command = new GetItemCommand({
+  //     TableName: this.tableName,
+  //     Key: marshall({ email }),
+  //   });
+
+  //   try {
+  //     const result = await this.dynamoDBClient.send(command);
+  //     return result.Item ? unmarshall(result.Item) : null;
+  //   } catch (error) {
+  //     console.error('Error fetching person', error);
+  //     throw new Error('Could not fetch person from DynamoDB');
+  //   }
+  // }
   // Retrieve all persons
   async getAllPersons(): Promise<any[]> {
     const command = new ScanCommand({
