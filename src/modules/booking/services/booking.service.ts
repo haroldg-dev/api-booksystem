@@ -11,7 +11,6 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { CreateBookingDto } from '../dto/create-booking.dto';
 import { v4 as uuidv4 } from 'uuid';
 import * as nodemailer from 'nodemailer';
-import { name } from '@azure/msal-node/dist/packageMetadata';
 
 @Injectable()
 export class BookingService {
