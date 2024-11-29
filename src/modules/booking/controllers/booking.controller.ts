@@ -50,7 +50,7 @@ export class BookingController {
     description: 'The booking has been created successfully.',
   })
   @ApiResponse({ status: 400, description: 'Invalid booking data.' })
-  async createBooking(@Body(ValidationPipe) bookingData: CreateBookingDto) {
+  async createBooking(@Body(ValidationPipe) bookingData: any) {
     return await this.bookingService.createBooking(bookingData);
   }
 

@@ -10,6 +10,8 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { CreateBookingDto } from '../dto/create-booking.dto';
 import { v4 as uuidv4 } from 'uuid';
+import * as nodemailer from 'nodemailer';
+import { name } from '@azure/msal-node/dist/packageMetadata';
 
 @Injectable()
 export class BookingService {
@@ -38,7 +40,7 @@ export class BookingService {
   }
 
   // Create a new booking
-  async createBooking(bookingData: CreateBookingDto) {
+  async createBooking(bookingData: any) {
     const command = new PutItemCommand({
       TableName: 'Bookings',
       Item: marshall({
@@ -49,6 +51,7 @@ export class BookingService {
       }),
     });
     await this.dynamoDbClient.send(command);
+    await this.sendConfirmationEmail(bookingData);
     return bookingData;
   }
 
@@ -99,5 +102,41 @@ export class BookingService {
     });
     await this.dynamoDbClient.send(command);
     return { id };
+  }
+
+  async sendConfirmationEmail(bookingData: any) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'tabitasrules@gmail.com',
+        pass: 'fmvnsjztlntzgpsf',
+      },
+    });
+
+    const mailOptions = {
+      from: 'tabitasrules@gmail.com',
+      name: 'System Booking',
+      to: bookingData.customerEmail,
+      subject: 'Booking Confirmation',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h1 style="color: #333; text-align: center;">Booking Confirmation</h1>
+          <p style="font-size: 16px;">Dear ${bookingData.customerName},</p>
+          <p style="font-size: 16px;">Your booking has been confirmed! Here are your booking details:</p>
+          
+          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <h2 style="color: #2c5282; margin-bottom: 15px;">Appointment Details</h2>
+            <p><strong>Date:</strong> ${bookingData.bookingDate}</p>
+            <p><strong>Service:</strong> ${bookingData.service}</p>
+            <p><strong>Description:</strong> ${bookingData.serviceDescription}</p>
+          </div>
+
+          <p style="font-size: 16px;">We look forward to seeing you!</p>
+          <p style="font-size: 14px; color: #666;">Best regards,<br>Your Spa Team</p>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
   }
 }
