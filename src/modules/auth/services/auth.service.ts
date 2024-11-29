@@ -12,7 +12,16 @@ export class AuthService {
       console.log(user);
       const matched = user.password == entity.password ? true : false;
       if (matched) {
-        return { status: 200, payload: { user: user.person_id } };
+        return {
+          status: 200,
+          payload: {
+            userId: user.person_id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone,
+          },
+        };
       }
       throw new HttpException('PASSWORD INCORRECT', 409);
     }

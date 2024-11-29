@@ -18,8 +18,9 @@ export class PersonService {
 
   // Create a new person
   async createPerson(person: any): Promise<any> {
+    const personId = uuidv4();
     const item = marshall({
-      person_id: uuidv4(),
+      person_id: personId,
       firstName: person.firstName,
       lastName: person.lastName,
       email: person.email,
@@ -34,7 +35,16 @@ export class PersonService {
 
     try {
       await this.dynamoDBClient.send(command);
-      return { message: 'Person created successfully!' };
+      return {
+        message: 'Person created successfully!',
+        payload: {
+          userId: personId,
+          firstName: person.firstName,
+          lastName: person.lastName,
+          email: person.email,
+          phone: person.phone,
+        },
+      };
     } catch (error) {
       console.error('Error creating person', error);
       throw new Error('Could not create person in DynamoDB');
